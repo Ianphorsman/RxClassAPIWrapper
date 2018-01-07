@@ -8,8 +8,7 @@ from functools import reduce
 
 class RxAPIWrapper(object):
 
-    def __init__(self, throttle=20):
-        self.throttle = throttle
+    def __init__(self):
         self.base_uri_interactions = 'https://rxnav.nlm.nih.gov/REST/interaction'
         self.base_uri_class = 'https://rxnav.nlm.nih.gov/REST/rxclass'
         self.base_uri_norm = 'https://rxnav.nlm.nih.gov/REST'

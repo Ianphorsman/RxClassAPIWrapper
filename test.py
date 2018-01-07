@@ -1,5 +1,5 @@
 from RxAPIWrapper import RxAPIWrapper
-from DrugHelpers import DrugHelpers
+from RxClassHelpers import DrugHelpers
 from pprint import pprint as pp
 
 

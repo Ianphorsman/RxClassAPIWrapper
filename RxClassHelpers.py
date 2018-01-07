@@ -9,10 +9,12 @@ from RxAPIWrapper import RxAPIWrapper
 import pdb
 
 
-class DrugHelpers(object):
+class RxClassHelpers(object):
 
-    def __init__(self):
-        self.api = RxAPIWrapper(throttle=20)
+    def __init__(self, save_memo=True, filename="rxclass_data"):
+        self.save_memo = save_memo
+        self.filename = filename
+        self.api = RxAPIWrapper()
         self.drug_class_types = {
             'VA': 'Class',
             'MOA': 'Mechanism of Action',
@@ -242,18 +244,18 @@ class DrugHelpers(object):
             'Pharmacokinetics': self.pharmacokinetics(drug_name),
         }
 
-    def save(self, filename='class_memo'):
-        with open("{}.p".format(filename), 'wb') as f:
+    def save(self):
+        with open("{}.p".format(self.filename), 'wb') as f:
             picklerick.dump(self.memo, f)
 
-    def wipe(self, filename='class_memo'):
-        open("{}.p".format(filename), 'wb').close()
+    def wipe(self):
+        open("{}.p".format(self.filename), 'wb').close()
 
-    def load(self, filename='class_memo'):
-        if not os.path.exists("{}.p".format(filename)):
-            with open("{}.p".format(filename), 'wb') as f:
+    def load(self):
+        if not os.path.exists("{}.p".format(self.filename)):
+            with open("{}.p".format(self.filename), 'wb') as f:
                 picklerick.dump({}, f)
-        with open("{}.p".format(filename), 'rb') as f:
+        with open("{}.p".format(self.filename), 'rb') as f:
             try:
                 data = picklerick.load(f)
             except EOFError:
@@ -265,10 +267,11 @@ class DrugHelpers(object):
         return self
 
     def __exit__(self, type, value, traceback):
-        self.save()
+        if self.save_memo:
+            self.save()
 
-
-with DrugHelpers() as bot:
+helper = RxClassHelpers()
+with helper:
     #pp(bot.drug_info('fluoxetine'))
     #pp(bot.get_class_data_of_drug('fluoxetine'))
     #pp(bot.get_similarly_acting_drugs('fluoxetine'))
@@ -282,4 +285,4 @@ with DrugHelpers() as bot:
 
     #pp(bot.drugs_sharing_properties(''))
     #pp(bot.subtypes('Cytochrome P450 Inducers'))
-    pp(bot.class_name_suggestions('oxetine', only_drugs=True))
+    pp(helper.class_name_suggestions('oxetine', only_drugs=True))
