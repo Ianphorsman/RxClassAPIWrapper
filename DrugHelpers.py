@@ -119,6 +119,20 @@ class DrugHelpers(object):
         drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
         return title, drug_names
 
+    def drugs_with_physiological_effect(self, effect):
+        ret = self.get_class_by_name(effect)
+        if 'classId' not in ret:
+            return "{} not found in database.".format(effect)
+        effect_id = ret['classId']
+        opts = {
+            'relaSource': 'NDFRT',
+            'rela': "has_PE"
+        }
+        ret = self.api.get_class_members(effect_id, opts)
+        title = "Drugs that result in {}".format(effect)
+        drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
+        return title, drug_names
+
     def get_class_by_name(self, class_name):
         ret = self.api.find_class_by_name(class_name)
         if 'rxclassMinConceptList' not in ret:
@@ -228,5 +242,5 @@ with DrugHelpers() as bot:
     #pp(bot.contraindications('with', 'seizure disorder'))
     #pp(bot.contraindications('with', 'hypoglycemia'))
     #pp(bot.drug_induces('vomiting'))
-    pp(bot.drugs_that_may('prevent', 'seizure disorder'))
-
+    #pp(bot.drugs_that_may('prevent', 'seizure disorder'))
+    #pp(bot.drugs_with_physiological_effect('Increased Serotonin Activity'))
