@@ -257,6 +257,6 @@ helper.class_name_suggestions('oxetine', only_drugs=True) # returns only drug na
 <h3>API Wrapper Functions</h3>
 
 
-###*Statement of Credit*
+<h4><emp>Statement of Credit</emp></h4>
 
 This product uses publicly available data from the U.S. National Library of Medicine (NLM), National Institutes of Health, Department of Health and Human Services; NLM is not responsible for the product and does not endorse or recommend this or any other product."
