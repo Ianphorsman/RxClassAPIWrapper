@@ -111,15 +111,67 @@ helper.drugs_with_pharmacokinetics('Hepatic Metabolism')
 
 ```
 
+<h4>Therapeutic Class</h4>
+
+```python
+
+helper.therapeutic_class('azithromycin')
+
+#=>
+
+helper.therapeutic_class('venlafaxine')
+
+#=>
+
+```
+
+<h4>Drug Type</h4>
+
+```python
+
+helper.drug_type('azithromycin')
+
+#=>
+
+helper.drug_type('venlafaxine')
+
+#=>
+
+```
+
+<h4>Class information of a given drug.</h4>
+
+```python
+
+helper.drug_info('ketamine')
+
+#=>
+
+```
+
 <h4>Drugs that can induce a reaction or condition.</h4>
 
 ```python
 
-helper.may_induce('vomiting')
+helper.drug_induces(vomiting')
 
 #=>
 
-helper.may_induce('seizures')
+helper.drug_induces(seizures')
+
+#=>
+
+```
+
+<h4>Drugs that may prevent a condition or acute reaction.</h4>
+
+```python
+
+helper.drugs_that_may('prevent', 'seizures')
+
+#=>
+
+helper.drugs_that_may('prevent', '')
 
 #=>
 
@@ -129,11 +181,11 @@ helper.may_induce('seizures')
 
 ```python
 
-helper.may_treat('seizures')
+helper.drugs_that_may('treat', 'seizures')
 
 #=>
 
-helper.may_treat('major depression')
+helper.drugs_that_may('treat', 'major depression')
 
 #=>
 
@@ -143,21 +195,64 @@ helper.may_treat('major depression')
 
 ```python
 
-helper.may_diagnose('')
+helper.drugs_that_may('diagnose', '')
+
+#=>
+
+helper.drugs_that_may('diagnose', '')
 
 #=>
 
 ```
 
 <h4>Contraindications</h4>
+<p>Not as straightforward. Supply 'with' instead of 'DISEASE'.</p>
 
 ```python
 
-helper.contraindications('')
+helper.contraindications('with', 'bulimia')
+
+#=>
+
+helper.contraindications('', '')
+
+#=>
+
+helper.contraindications('', '')
+
+#=>
+
+helper.contraindications('', '')
 
 #=>
 
 ```
+
+<h4>Class Subtypes</h4>
+<p>Use of this function appears to be limited currently.</p>
+```python
+
+helper.subtypes('')
+
+#=>
+
+```
+
+<h4>Spelling Suggestions</h4>
+
+```python
+
+helper.class_name_suggestions('')
+
+#=>
+
+helper.class_name_suggestions('oxetine', only_drugs=True) # returns only drug names
+
+#=>
+
+```
+
+<h4></h4>
 
 <h3>API Wrapper Functions</h3>
 
