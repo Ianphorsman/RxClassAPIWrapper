@@ -21,7 +21,7 @@ class RxAPIWrapper(object):
 
     def sanitize(self, opts):
         if type(opts) is dict:
-            return reduce(lambda acc, i: acc + "&{}={}".format(i[0][0], i[0][1]), zip(opts.items()), "")
+            return reduce(lambda acc, i: acc + "&{}={}".format(i[0], i[1]), opts.items(), "")
         return ''
 
     @make_request
