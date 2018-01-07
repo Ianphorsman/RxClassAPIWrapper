@@ -66,14 +66,30 @@ class DrugHelpers(object):
             'relaSource': 'DAILYMED',
             'rela': "has_{}".format('MOA')
         }
-        ret = bot.api.get_class_members(moa_id, opts)
+        ret = self.api.get_class_members(moa_id, opts)
+        if 'drugMemberGroup' not in ret:
+            return
         return (moa, [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']])
 
-    def get_contraindications(self, drug_name):
-        pass
+    def contraindications(self, rela, class_name):
+        class_type_id = self.get_class_by_name(class_name)['classId']
+        #pdb.set_trace()
+        opts = {
+            'relaSource': 'NDFRT',
+            'rela': "CI_{}".format(rela)
+        }
+        ret = self.api.get_class_members(class_type_id, opts)
+        title = "{} contraindications".format(class_name)
+        if 'drugMemberGroup' not in ret:
+            return (title, None)
+        drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
+        return (title, drug_names)
 
     def get_class_by_name(self, class_name):
-        return self.api.find_class_by_name(class_name)['rxclassMinConceptList']['rxclassMinConcept'][0]
+        ret = self.api.find_class_by_name(class_name)
+        if 'rxclassMinConceptList' not in ret:
+            return
+        return ret['rxclassMinConceptList']['rxclassMinConcept'][0]
 
 
     @memo
@@ -171,7 +187,9 @@ class DrugHelpers(object):
 
 
 with DrugHelpers() as bot:
-    pp(bot.drug_info('fluoxetine'))
+    #pp(bot.drug_info('fluoxetine'))
     #pp(bot.get_class_data_of_drug('fluoxetine'))
-    pp(bot.get_similarly_acting_drugs('fluoxetine'))
+    #pp(bot.get_similarly_acting_drugs('fluoxetine'))
+    #pp(bot.api.find_class_by_name('azithromycin'))
+    pp(bot.contraindications('with', 'seizure disorder'))
 
