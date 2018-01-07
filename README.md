@@ -7,10 +7,10 @@
 </p>
 <h3>Helper Functions</h3>
 <p>The DrugHelper class contains all helper functions and </p>
-`
+```
 with DrugHelpers() as RxClass:
     RxClass.<helper_method>()
-`
+```
 
 Statement of Credit
 "This product uses publicly available data from the U.S. National Library of Medicine (NLM), National Institutes of Health, Department of Health and Human Services; NLM is not responsible for the product and does not endorse or recommend this or any other product."
