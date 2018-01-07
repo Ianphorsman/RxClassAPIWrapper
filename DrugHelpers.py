@@ -83,7 +83,20 @@ class DrugHelpers(object):
         if 'drugMemberGroup' not in ret:
             return (title, None)
         drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
-        return (title, drug_names)
+        return title, drug_names
+
+    def drug_induces(self, disease):
+        disease_id = self.get_class_by_name(disease)['classId']
+        opts = {
+            'relaSource': 'NDFRT',
+            'rela': 'induces'
+        }
+        ret = self.api.get_class_members(disease_id, opts)
+        title = "Drugs that induce {}".format(disease)
+        if 'drugMemberGroup' not in ret:
+            return (title, None)
+        drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
+        return title, drug_names
 
     def get_class_by_name(self, class_name):
         ret = self.api.find_class_by_name(class_name)
@@ -190,6 +203,8 @@ with DrugHelpers() as bot:
     #pp(bot.drug_info('fluoxetine'))
     #pp(bot.get_class_data_of_drug('fluoxetine'))
     #pp(bot.get_similarly_acting_drugs('fluoxetine'))
-    #pp(bot.api.find_class_by_name('azithromycin'))
-    pp(bot.contraindications('with', 'seizure disorder'))
+    #pp(bot.api.find_class_by_name('long qt syndrome'))
+    #pp(bot.contraindications('with', 'seizure disorder'))
+    #pp(bot.contraindications('with', 'hypoglycemia'))
+    pp(bot.drug_induces('vomiting'))
 
