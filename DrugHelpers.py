@@ -206,8 +206,39 @@ class DrugHelpers(object):
             return
         return Counter([tup[1] for tup in self.memo[brand_name]['CHEM']]).most_common(1)[0][0]
 
-    def drug_names_in_class(self, class_name):
+    def drugs_sharing_properties(self, prop_1, prop_2):
+        prop_1_id = self.get_class_by_name(prop_1)
+        prop_2_id = self.get_class_by_name(prop_2)
+
+        ret = self.api.compare_classes()
+
+    def properties_shared_by_drugs(self, drug_name_1, drug_name_2):
         pass
+
+    def subtypes(self, class_name):
+        ret = self.get_class_by_name(class_name)
+        if 'classId' not in ret:
+            return "{} not found in database".format(class_name)
+        class_id = ret['classId']
+        pdb.set_trace()
+        ret = self.api.get_class_tree(class_id)
+        title = "Subtypes of {}".format(class_name)
+        if 'rxClassTree' not in ret:
+            return title, None
+        subtypes = [sub['minConcept'] for sub in ret['rxClassTree']['rxClass']]
+        return title, subtypes
+
+    def class_name_suggestions(self, class_name, only_drugs=False, class_type='CLASS'):
+        if only_drugs:
+            class_type = 'DRUGS'
+        ret = self.api.get_spelling_suggestions(class_name, class_type)
+        if 'suggestionList' not in ret:
+            return "Items similarly named to {} were not found.".format(class_name)
+        return ret['suggestionList']['suggestion']
+
+
+    def understand_class_types(self):
+        return reduce(lambda acc, ct: acc + ["{} = {}".format(ct[0], ct[1])], self.drug_class_types.items(), [])
 
     def drug_info(self, drug_name):
         return {
@@ -254,6 +285,10 @@ with DrugHelpers() as bot:
     #pp(bot.contraindications('with', 'seizure disorder'))
     #pp(bot.contraindications('with', 'hypoglycemia'))
     #pp(bot.drug_induces('vomiting'))
-    #pp(bot.drugs_that_may('prevent', 'seizure disorder'))
+    #pp(bot.drugs_that_may('treat', 'pain'))
     #pp(bot.drugs_with_physiological_effect('Increased Serotonin Activity'))
-    pp(bot.drugs_with_similar_pharmacokinetics('fluoxetine'))
+    #pp(bot.drugs_with_similar_pharmacokinetics('fluoxetine'))
+
+    #pp(bot.drugs_sharing_properties(''))
+    #pp(bot.subtypes('Cytochrome P450 Inducers'))
+    pp(bot.class_name_suggestions('oxetine', only_drugs=True))
