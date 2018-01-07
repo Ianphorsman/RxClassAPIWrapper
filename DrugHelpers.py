@@ -106,7 +106,7 @@ class DrugHelpers(object):
     def drugs_that_may(self, action, disease):
         ret = self.get_class_by_name(disease)
         if 'classId' not in ret:
-            return "{} not found in databse.".format(disease)
+            return "{} not found in database.".format(disease)
         disease_id = ret['classId']
         opts = {
             'relaSource': 'NDFRT',
@@ -228,5 +228,5 @@ with DrugHelpers() as bot:
     #pp(bot.contraindications('with', 'seizure disorder'))
     #pp(bot.contraindications('with', 'hypoglycemia'))
     #pp(bot.drug_induces('vomiting'))
-    pp(bot.drugs_that_may('prevent', 'ulcer'))
+    pp(bot.drugs_that_may('prevent', 'seizure disorder'))
 
