@@ -28,7 +28,7 @@ with helper:
 ```
 
 <h4>Obtaining Class's Id and Type</h4>
-<p>Unique identifiers are represented as `classId`(s). Every class in RxClass has a `classId` and `classType`.</p>
+<p>Unique identifiers are represented as *classId*(s). Every class in RxClass has a *classId* and *classType*.</p>
 
 ```python
 
@@ -102,6 +102,10 @@ helper.pharmacokinetics('fluoxetine')
 #=>
 
 helper.drugs_with_similar_pharmacokinetics('fluoxetine')
+
+#=>
+
+helper.drugs_with_pharmacokinetics('Hepatic Metabolism')
 
 #=>
 
