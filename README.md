@@ -7,9 +7,12 @@
 </p>
 <h3>Helper Functions</h3>
 <p>The DrugHelper class contains all helper functions and </p>
+
 ```python
+
 with DrugHelpers() as RxClass:
     RxClass.<helper_method>()
+
 ```
 
 Statement of Credit
