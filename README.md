@@ -7,8 +7,9 @@
 </p>
 <h3>Helper Functions</h3>
 <p>
-    `RxClassHelpers` contains several high level helper functions to help acquaint yourself with
-    what the RxClass API can do. Just create an instance to get started.
+    `RxClassHelpers` contains several high level helper functions to acquaint yourself with
+    what the RxClass API can (and can't) do. Just create an instance to get started.
+    <strong>Warning:</strong> there are a lot of false negative results.
 </p>
 
 ```python
@@ -230,6 +231,7 @@ helper.contraindications('', '')
 
 <h4>Class Subtypes</h4>
 <p>Use of this function appears to be limited currently.</p>
+
 ```python
 
 helper.subtypes('')
