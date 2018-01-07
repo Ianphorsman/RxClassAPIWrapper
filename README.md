@@ -17,7 +17,7 @@ helper = RxClassHelpers()
 
 ```
 
-<p>Supplying a `with` statement will also automatically load and save gathered data given a `filename`.</p>
+<p>Supplying a <strong>with</strong> statement will also automatically load and save gathered data given a filename.</p>
 
 ```python
 
@@ -28,11 +28,11 @@ with helper:
 ```
 
 <h4>Obtaining Class's Id and Type</h4>
-<p>Unique identifiers are represented as *classId*(s). Every class in RxClass has a *classId* and *classType*.</p>
+<p>Unique identifiers are represented as <strong>classId</strong>(s). Every class in RxClass has a <strong>classId</strong> and <strong>classType</strong>.</p>
 
 ```python
 
-helper.get_class_by_name('fluoxetine') # (prozac)
+helper.get_class_by_name('fluoxetine')
 
 #=>
 
@@ -111,6 +111,53 @@ helper.drugs_with_pharmacokinetics('Hepatic Metabolism')
 
 ```
 
+<h4>Drugs that can induce a reaction or condition.</h4>
+
+```python
+
+helper.may_induce('vomiting')
+
+#=>
+
+helper.may_induce('seizures')
+
+#=>
+
+```
+
+<h4>Drugs that <strong>may</strong> treat a condition or acute response.</h4>
+
+```python
+
+helper.may_treat('seizures')
+
+#=>
+
+helper.may_treat('major depression')
+
+#=>
+
+```
+
+<h4>Drugs that can diagnose a condition.</h4>
+
+```python
+
+helper.may_diagnose('')
+
+#=>
+
+```
+
+<h4>Contraindications</h4>
+
+```python
+
+helper.contraindications('')
+
+#=>
+
+```
 
 <h3>API Wrapper Functions</h3>
 
