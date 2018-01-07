@@ -32,15 +32,6 @@ class DrugHelpers(object):
             return func(self, drug_name)
         return wrapper
 
-    def deep_memo(func):
-        def wrapper(self, drug_name, drug_property):
-            if drug_name not in self.memo:
-                self.get_class_data_of_drug(drug_name)
-            if drug_property not in self.memo[drug_name]:
-                getattr(self, drug_property)(drug_name)
-            return func(self, drug_name, drug_property)
-        return wrapper
-
 
     def get_class_data_of_drug(self, drug_name):
         ret = self.api.find_class_by_drug_name(drug_name)
