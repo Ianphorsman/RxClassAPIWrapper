@@ -126,10 +126,22 @@ class DrugHelpers(object):
         effect_id = ret['classId']
         opts = {
             'relaSource': 'NDFRT',
-            'rela': "has_PE"
+            'rela': 'has_PE'
         }
         ret = self.api.get_class_members(effect_id, opts)
         title = "Drugs that result in {}".format(effect)
+        drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
+        return title, drug_names
+
+    def drugs_with_similar_pharmacokinetics(self, drug_name):
+        self.get_class_data_of_drug(drug_name)
+        pk_id, pk_name = self.memo[drug_name]['PK'][0]
+        opts = {
+            'relaSource': 'NDFRT',
+            'rela': 'has_PK'
+        }
+        ret = self.api.get_class_members(pk_id, opts)
+        title = "Drugs processed via {}".format(pk_name)
         drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
         return title, drug_names
 
@@ -244,3 +256,4 @@ with DrugHelpers() as bot:
     #pp(bot.drug_induces('vomiting'))
     #pp(bot.drugs_that_may('prevent', 'seizure disorder'))
     #pp(bot.drugs_with_physiological_effect('Increased Serotonin Activity'))
+    pp(bot.drugs_with_similar_pharmacokinetics('fluoxetine'))
