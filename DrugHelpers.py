@@ -72,8 +72,10 @@ class DrugHelpers(object):
         return (moa, [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']])
 
     def contraindications(self, rela, class_name):
-        class_type_id = self.get_class_by_name(class_name)['classId']
-        #pdb.set_trace()
+        ret = self.get_class_by_name(class_name)
+        if 'classId' not in ret:
+            return "{} not found in database.".format(class_name)
+        class_type_id = ret['classId']
         opts = {
             'relaSource': 'NDFRT',
             'rela': "CI_{}".format(rela)
@@ -81,12 +83,15 @@ class DrugHelpers(object):
         ret = self.api.get_class_members(class_type_id, opts)
         title = "{} contraindications".format(class_name)
         if 'drugMemberGroup' not in ret:
-            return (title, None)
+            return title, None
         drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
         return title, drug_names
 
     def drug_induces(self, disease):
-        disease_id = self.get_class_by_name(disease)['classId']
+        ret = self.get_class_by_name(disease)
+        if 'classId' not in ret:
+            return "{} not found in database.".format(disease)
+        disease_id = ret['classId']
         opts = {
             'relaSource': 'NDFRT',
             'rela': 'induces'
@@ -94,14 +99,30 @@ class DrugHelpers(object):
         ret = self.api.get_class_members(disease_id, opts)
         title = "Drugs that induce {}".format(disease)
         if 'drugMemberGroup' not in ret:
-            return (title, None)
+            return title, None
+        drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
+        return title, drug_names
+
+    def drugs_that_may(self, action, disease):
+        ret = self.get_class_by_name(disease)
+        if 'classId' not in ret:
+            return "{} not found in databse.".format(disease)
+        disease_id = ret['classId']
+        opts = {
+            'relaSource': 'NDFRT',
+            'rela': "may_{}".format(action)# action items allowed: prevent, diagnose, treat
+        }
+        ret = self.api.get_class_members(disease_id, opts)
+        title = "Drugs that may {} {}".format(action, disease)
+        if 'drugMemberGroup' not in ret:
+            return title, None
         drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
         return title, drug_names
 
     def get_class_by_name(self, class_name):
         ret = self.api.find_class_by_name(class_name)
         if 'rxclassMinConceptList' not in ret:
-            return
+            return ret
         return ret['rxclassMinConceptList']['rxclassMinConcept'][0]
 
 
@@ -206,5 +227,6 @@ with DrugHelpers() as bot:
     #pp(bot.api.find_class_by_name('long qt syndrome'))
     #pp(bot.contraindications('with', 'seizure disorder'))
     #pp(bot.contraindications('with', 'hypoglycemia'))
-    pp(bot.drug_induces('vomiting'))
+    #pp(bot.drug_induces('vomiting'))
+    pp(bot.drugs_that_may('prevent', 'ulcer'))
 
