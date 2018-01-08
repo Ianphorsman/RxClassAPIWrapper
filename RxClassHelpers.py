@@ -125,9 +125,10 @@ class RxClassHelpers(object):
             'rela': 'has_PE'
         }
         ret = self.api.get_class_members(pe_name, opts)
+        title = "Drugs that ellicit {}".format(pe_name)
         if 'drugMemberGroup' not in ret:
-            return
-        return (pe_name, [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']])
+            return title, None
+        return pe_name, [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
 
 
     def drugs_with_physiological_effect(self, effect):
@@ -144,8 +145,8 @@ class RxClassHelpers(object):
         drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
         return title, drug_names
 
+    @memo
     def drugs_with_similar_pharmacokinetics(self, drug_name):
-        self.get_class_data_of_drug(drug_name)
         pk_id, pk_name = self.memo[drug_name]['PK'][0]
         opts = {
             'relaSource': 'NDFRT',
@@ -157,7 +158,19 @@ class RxClassHelpers(object):
         return title, drug_names
 
     def drugs_with_pharmacokinetics(self, pe_name):
-        pass
+        ret = self.get_class_by_name(pe_name)
+        if 'classId' not in ret:
+            return "{} not found in database.".format(pe_name)
+        pk_id = ret['classId']
+        opts = {
+            'relaSource': 'NDFRT',
+            'rela': 'has_PK'
+        }
+        ret = self.api.get_class_members(pk_id, opts)
+        title = "Drugs processed via {}".format(pe_name)
+        drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
+        return title, drug_names
+
 
     def get_class_by_name(self, class_name):
         ret = self.api.find_class_by_name(class_name)
@@ -212,7 +225,6 @@ class RxClassHelpers(object):
         if 'EPC' not in self.memo[drug_name]:
             return
         return sorted(set([tup[1] for tup in self.memo[drug_name]['EPC']]))
-
 
     @memo
     def chemical_name_of_brand(self, brand_name):
@@ -307,4 +319,4 @@ with helper:
     #pp(bot.drugs_sharing_properties(''))
     #pp(bot.subtypes('Cytochrome P450 Inducers'))
     #pp(helper.class_name_suggestions('oxetine', only_drugs=True))
-    pp(helper.drugs_with_similar_physiological_response('ibuprofen'))
+    pp(helper.drugs_with_similar_physiological_response('quetiapine'))
