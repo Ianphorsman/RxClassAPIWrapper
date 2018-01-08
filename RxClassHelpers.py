@@ -24,7 +24,7 @@ class RxClassHelpers(object):
             'MESHPA': 'MeSH Pharmacological Actions',
             'EPC': 'Established Pharmacological Classes',
             'ATC1-4': 'Anatomical Therapeutic Chemical',
-            'DISEASE': 'Indications'
+            'DISEASE': 'Indication / Condition / Disease'
         }
 
     def memo(func):
@@ -53,6 +53,11 @@ class RxClassHelpers(object):
         self.memo[drug_name] = arranged_classes
         return arranged_classes
 
+    def drugs_indicated_for(self, indication_name):
+        ret = self.get_class_by_name(indication_name)
+        pass
+
+    @memo
     def get_similarly_acting_drugs(self, drug_name):
         moa_id, moa = self.memo[drug_name]['MOA'][0]
         opts = {
@@ -112,6 +117,19 @@ class RxClassHelpers(object):
         drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
         return title, drug_names
 
+    @memo
+    def drugs_with_similar_physiological_response(self, drug_name):
+        pe_id, pe_name = self.memo[drug_name]['PE'][0]
+        opts = {
+            'relaSource': 'DAILYMED',
+            'rela': 'has_PE'
+        }
+        ret = self.api.get_class_members(pe_name, opts)
+        if 'drugMemberGroup' not in ret:
+            return
+        return (pe_name, [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']])
+
+
     def drugs_with_physiological_effect(self, effect):
         ret = self.get_class_by_name(effect)
         if 'classId' not in ret:
@@ -137,6 +155,9 @@ class RxClassHelpers(object):
         title = "Drugs processed via {}".format(pk_name)
         drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
         return title, drug_names
+
+    def drugs_with_pharmacokinetics(self, pe_name):
+        pass
 
     def get_class_by_name(self, class_name):
         ret = self.api.find_class_by_name(class_name)
@@ -230,7 +251,7 @@ class RxClassHelpers(object):
         return ret['suggestionList']['suggestion']
 
 
-    def understand_class_types(self):
+    def list_class_types(self):
         return reduce(lambda acc, ct: acc + ["{} = {}".format(ct[0], ct[1])], self.drug_class_types.items(), [])
 
     def drug_info(self, drug_name):
@@ -285,4 +306,5 @@ with helper:
 
     #pp(bot.drugs_sharing_properties(''))
     #pp(bot.subtypes('Cytochrome P450 Inducers'))
-    pp(helper.class_name_suggestions('oxetine', only_drugs=True))
+    #pp(helper.class_name_suggestions('oxetine', only_drugs=True))
+    pp(helper.drugs_with_similar_physiological_response('ibuprofen'))
