@@ -8,7 +8,5 @@ setup(
     author_email='ianphorsman@gmail.com',
     license='MIT',
     version='0.1',
-    packages=['rxclass-api'],
-
-    scripts=['RxAPIWrapper', 'RxClassHelpers']
+    packages=['rxclass-api']
 )
