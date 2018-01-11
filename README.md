@@ -35,19 +35,22 @@ with helper:
 
 helper.get_class_by_name('fluoxetine')
 
-#=> {'classId': 'N0000007101',
+#=>
+{'classId': 'N0000007101',
   'className': 'Fluoxetine',
   'classType': 'CHEM'}
 
 helper.get_class_by_name('SSRI')
 
-#=> {'classId': 'N0000175696',
+#=>
+{'classId': 'N0000175696',
  'className': 'Serotonin Reuptake Inhibitor',
  'classType': 'EPC'}
 
  helper.get_class_by_name('Drug Hypersensitivity')
 
- #=> {'classId': 'N0000000999',
+#=>
+{'classId': 'N0000000999',
  'className': 'Drug Hypersensitivity',
  'classType': 'DISEASE'}
 
@@ -60,7 +63,8 @@ helper.get_class_by_name('SSRI')
 
 helper.list_class_types()
 
-#=> ['MESHPA = MeSH Pharmacological Actions',
+#=>
+['MESHPA = MeSH Pharmacological Actions',
  'VA = Class',
  'PK = Pharmacokinetics',
  'EPC = Established Pharmacological Classes',
@@ -78,7 +82,8 @@ helper.list_class_types()
 
 helper.indications('bupropion')
 
-#=> ['Anorexia',
+#=>
+['Anorexia',
  'Attention Deficit Disorder with Hyperactivity',
  'Bulimia',
  'Depressive Disorder',
@@ -89,7 +94,8 @@ helper.indications('bupropion')
 
  helper.indications('azithromycin')
 
- #=> ['Chlamydia Infections',
+ #=>
+ ['Chlamydia Infections',
  'Endocarditis, Bacterial',
  'Haemophilus Infections',
  'Hypersensitivity',
@@ -117,15 +123,18 @@ helper.indications('bupropion')
 
 helper.mechanism_of_action('marijuana') # 'marijuana' will not be in database
 
-#=> []
+#=>
+[]
 
 helper.mechanism_of_action('tetrahydrocannabinol') # chemical name will be found though
 
-#=> ['Cannabinoid Receptor Agonists']
+#=>
+['Cannabinoid Receptor Agonists']
 
 helper.similarly_acting_drugs('fluoxetine')
 
-#=> [('Serotonin Uptake Inhibitors',
+#=>
+[('Serotonin Uptake Inhibitors',
   ['Citalopram',
    'Desvenlafaxine',
    'duloxetine',
@@ -153,22 +162,26 @@ helper.similarly_acting_drugs('fluoxetine')
 
 helper.physiological_effect('aripiprazole')
 
-#=> ['Decreased Dopamine Activity', 'Decreased Serotonin Activity']
+#=>
+['Decreased Dopamine Activity', 'Decreased Serotonin Activity']
 
 helper.drugs_with_similar_physiological_response('ibuprofen')
 
-#=> [('Decreased Platelet Activating Factor Production', None),
+#=>
+[('Decreased Platelet Activating Factor Production', None),
  ('Decreased Prostaglandin Production', ['Aspirin', 'Diclofenac']),
  ('Decreased Thromboxane Production', None)]
 
 helper.drugs_with_similar_physiological_response('aripiprazole') # will yield a false negative
 
-#=> [('Decreased Dopamine Activity', None),
+#=>
+[('Decreased Dopamine Activity', None),
  ('Decreased Serotonin Activity', None)]
 
 helper.drugs_with_physiological_effect('Decreased Dopamine Activity') # but this works
 
-#=> ('Decreased Dopamine Activity',
+#=>
+('Decreased Dopamine Activity',
  ['acetophenazine',
   'aripiprazole',
   'Chlorpromazine',
@@ -188,11 +201,13 @@ helper.drugs_with_physiological_effect('Decreased Dopamine Activity') # but this
 
 helper.pharmacokinetics('ibuprofen')
 
-#=> ['Hepatic Metabolism', 'Renal Excretion']
+#=>
+['Hepatic Metabolism', 'Renal Excretion']
 
 helper.drugs_with_similar_pharmacokinetics('ibuprofen')
 
-#=> [('Drugs processed via Renal Excretion',
+#=>
+[('Drugs processed via Renal Excretion',
   ['Acetaminophen',
    'Albuterol',
    'Alprazolam',
@@ -209,7 +224,8 @@ helper.drugs_with_similar_pharmacokinetics('ibuprofen')
 
 helper.drugs_with_pharmacokinetics('Hepatic Metabolism')
 
-#=> ('Hepatic Metabolism',
+#=>
+('Hepatic Metabolism',
  ['Acetaminophen',
   'Albuterol',
   'Aspirin',
@@ -226,11 +242,13 @@ helper.drugs_with_pharmacokinetics('Hepatic Metabolism')
 
 helper.therapeutic_class('azithromycin')
 
-#=> ['Antibiotics', 'Macrolides']
+#=>
+['Antibiotics', 'Macrolides']
 
 helper.therapeutic_class('budesonide')
 
-#=> ['Adrenergics in combination with corticosteroids or other drugs, excl. '
+#=>
+['Adrenergics in combination with corticosteroids or other drugs, excl. '
  'anticholinergics',
  'Corticosteroids',
  'Corticosteroids acting locally',
@@ -245,11 +263,13 @@ helper.therapeutic_class('budesonide')
 
 helper.drug_type('azithromycin')
 
-#=> ['ANTIBACTERIALS,TOPICAL OPHTHALMIC', 'ERYTHROMYCINS/MACROLIDES']
+#=>
+['ANTIBACTERIALS,TOPICAL OPHTHALMIC', 'ERYTHROMYCINS/MACROLIDES']
 
 helper.drug_type('budesonide')
 
-#=> ['ANTI-INFLAMMATORIES,INHALATION',
+#=>
+['ANTI-INFLAMMATORIES,INHALATION',
  'ANTI-INFLAMMATORIES,NASAL',
  'ANTIASTHMA,OTHER',
  'GLUCOCORTICOIDS']
@@ -262,7 +282,8 @@ helper.drug_type('budesonide')
 
 helper.drug_info('ketamine')
 
-#=> {'Drug Type': ['GENERAL ANESTHETICS,OTHER'],
+#=>
+{'Drug Type': ['GENERAL ANESTHETICS,OTHER'],
  'Indications': ['Aneurysm',
                  'Angina Pectoris',
                  'Burns',
@@ -296,12 +317,14 @@ helper.drug_info('ketamine')
 
 helper.drug_induces(vomiting')
 
-#=> ('Drugs that induce vomiting',
+#=>
+('Drugs that induce vomiting',
  ['Disulfiram', 'ethyl ether', 'Ipecac', 'Nitrous Oxide'])
 
 helper.drug_induces(seizure disorder')
 
-#=> ('Drugs that induce seizure disorder', ['Pentylenetetrazole'])
+#=>
+('Drugs that induce seizure disorder', ['Pentylenetetrazole'])
 
 ```
 
@@ -311,12 +334,14 @@ helper.drug_induces(seizure disorder')
 
 helper.drugs_that_may('prevent', 'seizure disorder')
 
-#=> ('Drugs that may prevent seizure disorder',
+#=>
+('Drugs that may prevent seizure disorder',
  ['fosphenytoin', 'Magnesium Sulfate', 'Phenytoin', 'Thiamylal'])
 
 helper.drugs_that_may('prevent', 'dementia')
 
-#=> ('Drugs that may prevent alzheimer disease', ['Vitamin E'])
+#=>
+('Drugs that may prevent alzheimer disease', ['Vitamin E'])
 
 ```
 
@@ -326,7 +351,8 @@ helper.drugs_that_may('prevent', 'dementia')
 
 helper.drugs_that_may('treat', 'seizures')
 
-#=> ('Drugs that may treat seizure disorder',
+#=>
+('Drugs that may treat seizure disorder',
  ['Acetazolamide',
   'Amobarbital',
   'Brivaracetam',
@@ -347,7 +373,8 @@ helper.drugs_that_may('treat', 'seizures')
 
 helper.drugs_that_may('treat', 'depressive disorder')
 
-#=> ('Drugs that may treat depressive disorder',
+#=>
+('Drugs that may treat depressive disorder',
  ['Alprazolam',
   'Amitriptyline',
   'Amoxapine',
@@ -383,10 +410,6 @@ helper.drugs_that_may('treat', 'depressive disorder')
 
 ```python
 
-helper.drugs_that_may('diagnose', '')
-
-#=>
-
 helper.drugs_that_may('diagnose', '<condition>')
 
 #=> # yet to find a condition name that yields results from NDFRT database
@@ -400,7 +423,8 @@ helper.drugs_that_may('diagnose', '<condition>')
 
 helper.contraindications('with', 'Drug Hypersensitivity')
 
-#=> ('Drug Hypersensitivity contraindications',
+#=>
+('Drug Hypersensitivity contraindications',
  ['17-alpha-Hydroxyprogesterone',
   '4-Aminobenzoic Acid',
   'abacavir',
@@ -415,11 +439,13 @@ helper.contraindications('with', 'Drug Hypersensitivity')
 
 helper.contraindications('with', 'bulimia')
 
-#=> ('bulimia contraindications', ['Bupropion'])
+#=>
+('bulimia contraindications', ['Bupropion'])
 
 helper.contraindications('with', 'schizophrenia')
 
-#=> ('schizophrenia contraindications',
+#=>
+('schizophrenia contraindications',
  ['Fenfluramine', 'Ginseng Preparation', 'Tetrahydrocannabinol'])
 
 ```
@@ -441,7 +467,8 @@ helper.subtypes('')
 
 helper.class_name_suggestions('amines')
 
-#=> ['amines',
+#=>
+['amines',
  'amides',
  'diamines',
  'azides',
@@ -454,7 +481,8 @@ helper.class_name_suggestions('amines')
 
 helper.class_name_suggestions('oxetine', only_drugs=True) # returns only drug names
 
-#=> ['fluoxetine',
+#=>
+['fluoxetine',
  'paroxetine',
  'reboxetine',
  'duloxetine',
