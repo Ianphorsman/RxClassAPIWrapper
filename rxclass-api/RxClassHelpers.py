@@ -1,8 +1,9 @@
+import _pickle as picklerick
+import os
 from collections import Counter
 from functools import reduce
-import os
-import _pickle as picklerick
-from RxAPIWrapper import RxAPIWrapper
+
+from .RxAPIWrapper import RxAPIWrapper
 
 
 class RxClassHelpers(object):

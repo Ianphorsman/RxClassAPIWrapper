@@ -2,3 +2,6 @@
 *.p
 *.idea
 /__pycache__
+*.pyc
+/dist/
+/*.egg-info
