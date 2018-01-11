@@ -492,8 +492,6 @@ helper.class_name_suggestions('oxetine', only_drugs=True) # returns only drug na
 
 ```
 
-<h3>API Wrapper Functions</h3>
-
 
 <h4><emp>Statement of Credit</emp></h4>
 
