@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='rxclass-api',
+    name='rxclass',
     description='Python wrapper for RxClass API',
     url='https://github.com/Ianphorsman/RxClassAPIWrapper',
     author='Ian Horsman',
