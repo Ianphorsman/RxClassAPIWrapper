@@ -14,6 +14,17 @@
 
 ```python
 
+pip install rxclass
+
+# To access API helpers do:
+
+from rxclass_api import RxClassHelpers
+
+# To access API wrapper functions directly do:
+from rxclass_api import RxAPIWrapper
+
+# To start using available helper functions create a helper instance.
+
 helper = RxClassHelpers()
 
 ```
