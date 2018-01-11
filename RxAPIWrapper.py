@@ -1,11 +1,7 @@
 import requests
 import json
-import csv
-import xml
 from pprint import pprint as pp
-import _pickle as picklerick
 from functools import reduce
-import pdb
 
 class RxAPIWrapper(object):
 

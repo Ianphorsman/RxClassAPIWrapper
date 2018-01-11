@@ -1,12 +1,8 @@
-import json
-import requests
 from collections import Counter
 from functools import reduce
 import os
 import _pickle as picklerick
-from pprint import pprint as pp
 from RxAPIWrapper import RxAPIWrapper
-import pdb
 
 
 class RxClassHelpers(object):
@@ -217,9 +213,7 @@ class RxClassHelpers(object):
             'equivalenceThreshold': 0.3,
             'inclusionThreshold': 0.3
         }
-        #pdb.set_trace()
         ret = self.api.find_similar_classes_by_class(ret['classId'], opts)
-        pdb.set_trace()
 
 
 
@@ -337,44 +331,3 @@ class RxClassHelpers(object):
     def __exit__(self, type, value, traceback):
         if self.save_memo:
             self.save()
-
-helper = RxClassHelpers()
-with helper:
-    #pp(bot.drug_info('fluoxetine'))
-    #pp(bot.get_class_data_of_drug('fluoxetine'))
-    #pp(bot.get_similarly_acting_drugs('fluoxetine'))
-    #pp(bot.api.find_class_by_name('long qt syndrome'))
-    #pp(bot.contraindications('with', 'seizure disorder'))
-    #pp(bot.contraindications('with', 'hypoglycemia'))
-    #pp(bot.drug_induces('vomiting'))
-    #pp(bot.drugs_that_may('treat', 'pain'))
-    #pp(bot.drugs_with_physiological_effect('Increased Serotonin Activity'))
-    #pp(bot.drugs_with_similar_pharmacokinetics('fluoxetine'))
-
-    #pp(bot.drugs_sharing_properties(''))
-    #pp(bot.subtypes('Cytochrome P450 Inducers'))
-    #pp(helper.class_name_suggestions('oxetine', only_drugs=True))
-    #pp(helper.drugs_with_similar_physiological_response('quetiapine'))
-    #pp(helper.class_name_suggestions('depression'))
-    #pp(helper.drugs_indicated_for('major depression'))
-    #pp(helper.drugs_that_may('treat', 'dysthymia'))
-    #pp(helper.drugs_that_may('treat', 'arrhythmia'))
-    #pp(helper.contraindications('with', 'pain'))
-    #pp(set(helper.drugs_that_may('treat', 'pain')[1]) & set(helper.contraindications('with', 'pain')[1]))
-    #pp(helper.contraindications('CHEM', 'dopamine'))
-    #pp(helper.contraindications('with', 'schizophrenia'))
-    #pp(helper.contraindications('with', 'mood disorders'))
-    #pp(helper.contraindications('with', 'manic episode'))
-    #pp(helper.indications('lithium'))
-    #pp(helper.indications('ropinirole'))
-    #pp(helper.contraindications('with', 'Drug Hypersensitivity')) # useful
-    #pp(helper.drugs_that_may('treat', 'stress'))
-    #pp(helper.contraindications('with', 'fibromyalgia'))
-    #pp(helper.contraindications('with', 'narcolepsy'))
-    #pp(helper.drugs_that_may('treat', 'fatigue'))
-    #drugs = helper.drugs_that_may('treat', 'ADHD')
-    #for drug in drugs:
-     #   pp(drug) #helper.indications(drug))
-    #drugs = helper.drugs_that_may('treat', 'xerostomia')
-    drugs = helper.class_name_suggestions('amines')
-    pp(drugs)
