@@ -12,15 +12,19 @@
     <strong>Warning:</strong> there are a lot of false negative results.
 </p>
 
-```python
+```
 
 pip install rxclass
 
-# To access API helpers do:
+```
+
+```python
+
+# To access API helpers:
 
 from rxclass_api import RxClassHelpers
 
-# To access API wrapper functions directly do:
+# To access API wrapper functions directly:
 from rxclass_api import RxAPIWrapper
 
 # To start using available helper functions create a helper instance.
