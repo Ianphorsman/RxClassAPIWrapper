@@ -5,6 +5,7 @@ import xml
 from pprint import pprint as pp
 import _pickle as picklerick
 from functools import reduce
+import pdb
 
 class RxAPIWrapper(object):
 
@@ -29,7 +30,7 @@ class RxAPIWrapper(object):
         return self.base_uri_class + '/interaction.json?rxcui=' + str(341248)
 
     @make_request
-    def find_class_by_class_id(self, drug_class_id):
+    def find_class_by_id(self, drug_class_id):
         return self.base_uri_class + "/class/byId.json?classId={}".format(drug_class_id)
 
     @make_request
@@ -42,11 +43,11 @@ class RxAPIWrapper(object):
 
     @make_request
     def find_similar_classes_by_class(self, class_id, opts=None):
-        return self.base_uri_class + "/similar.json?chassId={}".format(class_id) + self.sanitize(opts)
+        return self.base_uri_class + "/class/similar.json?classId={}".format(class_id) + self.sanitize(opts)
 
     @make_request
     def find_similar_classes_by_drug_list(self, drug_ids, opts=None):
-        return self.base_uri_class + "/similarByRxcuis?rxcuis={}".format(drug_ids) + self.sanitize(opts)
+        return self.base_uri_class + "/class/similarByRxcuis?rxcuis={}".format(drug_ids) + self.sanitize(opts)
 
     @make_request
     def get_all_classes(self, class_types=None):

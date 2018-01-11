@@ -37,6 +37,10 @@ class RxClassHelpers(object):
 
     def get_class_data_of_drug(self, drug_name):
         ret = self.api.find_class_by_drug_name(drug_name)
+        if 'rxclassDrugInfoList' not in ret:
+            error = "{} not found in database".format(drug_name)
+            self.memo[drug_name] = [error]
+            return error
         classes = {
             (source['rxclassMinConceptItem']['className'],
              source['rxclassMinConceptItem']['classType'],
@@ -44,7 +48,6 @@ class RxClassHelpers(object):
             for source in ret['rxclassDrugInfoList']['rxclassDrugInfo']
         }
         arranged_classes = {}
-        #pdb.set_trace()
         for tup in classes:
             if tup[1] not in arranged_classes:
                 arranged_classes[tup[1]] = [(tup[2], tup[0])]
@@ -53,21 +56,25 @@ class RxClassHelpers(object):
         self.memo[drug_name] = arranged_classes
         return arranged_classes
 
-    def drugs_indicated_for(self, indication_name):
-        ret = self.get_class_by_name(indication_name)
-        pass
 
     @memo
-    def get_similarly_acting_drugs(self, drug_name):
-        moa_id, moa = self.memo[drug_name]['MOA'][0]
-        opts = {
-            'relaSource': 'DAILYMED',
-            'rela': "has_{}".format('MOA')
-        }
-        ret = self.api.get_class_members(moa_id, opts)
-        if 'drugMemberGroup' not in ret:
-            return
-        return (moa, [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']])
+    def similarly_acting_drugs(self, drug_name):
+        if 'MOA' not in self.memo[drug_name]:
+            return "{} has no recorded mechanism of action.".format(drug_name)
+        pairs = self.memo[drug_name]['MOA']
+        moa_data = []
+        def get_similar(id, name):
+            opts = {
+                'relaSource': 'DAILYMED',
+                'rela': "has_{}".format('MOA')
+            }
+            ret = self.api.get_class_members(id, opts)
+            if 'drugMemberGroup' not in ret:
+                return name, None
+            return name, [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
+        for moa_id, moa_name in pairs:
+            moa_data.append(get_similar(moa_id, moa_name))
+        return moa_data
 
     def contraindications(self, rela, class_name):
         ret = self.get_class_by_name(class_name)
@@ -119,17 +126,22 @@ class RxClassHelpers(object):
 
     @memo
     def drugs_with_similar_physiological_response(self, drug_name):
-        pe_id, pe_name = self.memo[drug_name]['PE'][0]
-        opts = {
-            'relaSource': 'DAILYMED',
-            'rela': 'has_PE'
-        }
-        ret = self.api.get_class_members(pe_name, opts)
-        title = "Drugs that ellicit {}".format(pe_name)
-        if 'drugMemberGroup' not in ret:
-            return title, None
-        return pe_name, [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
-
+        if not 'PE' in self.memo[drug_name]:
+            return "{} does not have a recorded physiological response or was not found in database.".format(drug_name)
+        pairs = self.memo[drug_name]['PE']
+        pe_data = []
+        def get_similar(id, name):
+            opts = {
+                'relaSource': 'DAILYMED',
+                'rela': 'has_PE'
+            }
+            ret = self.api.get_class_members(id, opts)
+            if 'drugMemberGroup' not in ret:
+                return name, None
+            return name, [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
+        for pe_id, pe_name in pairs:
+            pe_data.append(get_similar(pe_id, pe_name))
+        return pe_data
 
     def drugs_with_physiological_effect(self, effect):
         ret = self.get_class_by_name(effect)
@@ -141,21 +153,29 @@ class RxClassHelpers(object):
             'rela': 'has_PE'
         }
         ret = self.api.get_class_members(effect_id, opts)
-        title = "Drugs that result in {}".format(effect)
+        if 'drugMemberGroup' not in ret:
+            return effect, None
         drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
-        return title, drug_names
+        return effect, drug_names
 
     @memo
     def drugs_with_similar_pharmacokinetics(self, drug_name):
-        pk_id, pk_name = self.memo[drug_name]['PK'][0]
-        opts = {
-            'relaSource': 'NDFRT',
-            'rela': 'has_PK'
-        }
-        ret = self.api.get_class_members(pk_id, opts)
-        title = "Drugs processed via {}".format(pk_name)
-        drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
-        return title, drug_names
+        pairs = self.memo[drug_name]['PK']
+        pe_data = []
+        def get_similar(id, name):
+            opts = {
+                'relaSource': 'NDFRT',
+                'rela': 'has_PK'
+            }
+            ret = self.api.get_class_members(id, opts)
+            if 'drugMemberGroup' not in ret:
+                return name, None
+            drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
+            return name, drug_names
+        for pk_id, pk_name in pairs:
+            pe_data.append(get_similar(pk_id, pk_name))
+        return pe_data
+
 
     def drugs_with_pharmacokinetics(self, pe_name):
         ret = self.get_class_by_name(pe_name)
@@ -167,9 +187,10 @@ class RxClassHelpers(object):
             'rela': 'has_PK'
         }
         ret = self.api.get_class_members(pk_id, opts)
-        title = "Drugs processed via {}".format(pe_name)
+        if 'drugMemberGroup' not in ret:
+            return pe_name, None
         drug_names = [member['minConcept']['name'] for member in ret['drugMemberGroup']['drugMember']]
-        return title, drug_names
+        return pe_name, drug_names
 
 
     def get_class_by_name(self, class_name):
@@ -177,6 +198,29 @@ class RxClassHelpers(object):
         if 'rxclassMinConceptList' not in ret:
             return ret
         return ret['rxclassMinConceptList']['rxclassMinConcept'][0]
+
+    def get_class_by_id(self, class_id):
+        ret = self.api.find_class_by_id(class_id)
+        if 'rxclassMinConceptList' not in ret:
+            return ret
+        return ret['rxclassMinConceptList']['rxclassMinConcept'][0]
+
+    def similar_classes(self, class_name, limit=10):
+        ret = self.get_class_by_name(class_name)
+        if 'classId' not in ret:
+            return "{} not found in database.".format(class_name)
+        opts = {
+            'relaSource': 'ATC',
+            #'rela': 'MOA',
+            'scoreType': 2,
+            'top': limit,
+            'equivalenceThreshold': 0.3,
+            'inclusionThreshold': 0.3
+        }
+        #pdb.set_trace()
+        ret = self.api.find_similar_classes_by_class(ret['classId'], opts)
+        pdb.set_trace()
+
 
 
     @memo
@@ -232,21 +276,12 @@ class RxClassHelpers(object):
             return
         return Counter([tup[1] for tup in self.memo[brand_name]['CHEM']]).most_common(1)[0][0]
 
-    def drugs_sharing_properties(self, prop_1, prop_2):
-        prop_1_id = self.get_class_by_name(prop_1)
-        prop_2_id = self.get_class_by_name(prop_2)
-
-        ret = self.api.compare_classes()
-
-    def properties_shared_by_drugs(self, drug_name_1, drug_name_2):
-        pass
 
     def subtypes(self, class_name):
         ret = self.get_class_by_name(class_name)
         if 'classId' not in ret:
             return "{} not found in database".format(class_name)
         class_id = ret['classId']
-        pdb.set_trace()
         ret = self.api.get_class_tree(class_id)
         title = "Subtypes of {}".format(class_name)
         if 'rxClassTree' not in ret:
@@ -319,4 +354,27 @@ with helper:
     #pp(bot.drugs_sharing_properties(''))
     #pp(bot.subtypes('Cytochrome P450 Inducers'))
     #pp(helper.class_name_suggestions('oxetine', only_drugs=True))
-    pp(helper.drugs_with_similar_physiological_response('quetiapine'))
+    #pp(helper.drugs_with_similar_physiological_response('quetiapine'))
+    #pp(helper.class_name_suggestions('depression'))
+    #pp(helper.drugs_indicated_for('major depression'))
+    #pp(helper.drugs_that_may('treat', 'dysthymia'))
+    #pp(helper.drugs_that_may('treat', 'arrhythmia'))
+    #pp(helper.contraindications('with', 'pain'))
+    #pp(set(helper.drugs_that_may('treat', 'pain')[1]) & set(helper.contraindications('with', 'pain')[1]))
+    #pp(helper.contraindications('CHEM', 'dopamine'))
+    #pp(helper.contraindications('with', 'schizophrenia'))
+    #pp(helper.contraindications('with', 'mood disorders'))
+    #pp(helper.contraindications('with', 'manic episode'))
+    #pp(helper.indications('lithium'))
+    #pp(helper.indications('ropinirole'))
+    #pp(helper.contraindications('with', 'Drug Hypersensitivity')) # useful
+    #pp(helper.drugs_that_may('treat', 'stress'))
+    #pp(helper.contraindications('with', 'fibromyalgia'))
+    #pp(helper.contraindications('with', 'narcolepsy'))
+    #pp(helper.drugs_that_may('treat', 'fatigue'))
+    #drugs = helper.drugs_that_may('treat', 'ADHD')
+    #for drug in drugs:
+     #   pp(drug) #helper.indications(drug))
+    #drugs = helper.drugs_that_may('treat', 'xerostomia')
+    drugs = helper.class_name_suggestions('amines')
+    pp(drugs)
