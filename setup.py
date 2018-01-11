@@ -7,6 +7,6 @@ setup(
     author='Ian Horsman',
     author_email='ianphorsman@gmail.com',
     license='MIT',
-    version='0.1.1',
+    version='0.1.2',
     packages=['rxclass_api']
 )
