@@ -10,6 +10,7 @@ class RxClassHelpers(object):
 
     def __init__(self, save_memo=True, filename="rxclass_data"):
         self.save_memo = save_memo
+        self.memo = {}
         self.filename = filename
         self.api = RxAPIWrapper()
         self.drug_class_types = {
@@ -332,3 +333,6 @@ class RxClassHelpers(object):
     def __exit__(self, type, value, traceback):
         if self.save_memo:
             self.save()
+
+helper = RxClassHelpers()
+print(helper.indications('bupropion'))
