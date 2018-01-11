@@ -333,6 +333,3 @@ class RxClassHelpers(object):
     def __exit__(self, type, value, traceback):
         if self.save_memo:
             self.save()
-
-helper = RxClassHelpers()
-print(helper.indications('bupropion'))
